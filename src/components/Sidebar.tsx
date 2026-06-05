@@ -4,7 +4,7 @@
  */
 
 import React, { useState, useRef } from "react";
-import { Upload, Download, FileCode, Check, AlertCircle, HelpCircle, ChevronLeft, ChevronRight, BookOpen, Trash2, Key, Lock, Link, Sparkles } from "lucide-react";
+import { Upload, Download, FileCode, Check, AlertCircle, HelpCircle, ChevronLeft, ChevronRight, BookOpen, Trash2, Key, Lock, Link } from "lucide-react";
 import { PrismaModel } from "../types";
 import { formatPrismaSchema, highlightPrismaLine } from "../utils/prismaFormatter";
 
@@ -29,7 +29,7 @@ export default function Sidebar({
 }: SidebarProps) {
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  
+
   const [sidebarWidth, setSidebarWidth] = useState(360);
   const [isResizing, setIsResizing] = useState(false);
   const [showClearConfirm, setShowClearConfirm] = useState(false);
@@ -141,23 +141,19 @@ export default function Sidebar({
       <div
         id="sidebar-panel"
         style={{ width: isOpen ? `${sidebarWidth}px` : "0px" }}
-        className={`relative h-full flex flex-col border-r shadow-md z-30 ${
-          isOpen ? "opacity-100" : "opacity-0 overflow-hidden pointer-events-none"
-        } ${
-          isResizing ? "" : "transition-all duration-300"
-        } ${
-          isDarkMode
+        className={`relative h-full flex flex-col border-r shadow-md z-30 ${isOpen ? "opacity-100" : "opacity-0 overflow-hidden pointer-events-none"
+          } ${isResizing ? "" : "transition-all duration-300"
+          } ${isDarkMode
             ? "bg-slate-900 border-slate-800 text-slate-100"
             : "bg-slate-50 border-slate-200 text-slate-800"
-        }`}
+          }`}
       >
         {/* Drag resize handle */}
         {isOpen && (
           <div
             onMouseDown={startResizing}
-            className={`absolute top-0 right-0 w-1 h-full cursor-col-resize z-50 transition-colors ${
-              isResizing ? "bg-indigo-500 scale-x-125" : "hover:bg-indigo-500/40"
-            }`}
+            className={`absolute top-0 right-0 w-1 h-full cursor-col-resize z-50 transition-colors ${isResizing ? "bg-indigo-500 scale-x-125" : "hover:bg-indigo-500/40"
+              }`}
             title="Drag to resize"
           />
         )}
@@ -168,11 +164,10 @@ export default function Sidebar({
             <h2 className="font-bold text-sm tracking-tight font-sans">Schema Source Input</h2>
           </div>
           <span
-            className={`px-2.5 py-0.5 rounded-full text-xs font-mono font-bold flex items-center gap-1 ${
-              parsedModels.length > 0
+            className={`px-2.5 py-0.5 rounded-full text-xs font-mono font-bold flex items-center gap-1 ${parsedModels.length > 0
                 ? "bg-emerald-500/10 text-emerald-500"
                 : "bg-amber-500/15 text-amber-500"
-            }`}
+              }`}
           >
             {parsedModels.length > 0 ? (
               <>
@@ -206,15 +201,14 @@ export default function Sidebar({
                       onSchemaChange(formatted);
                     }
                   }}
-                  className={`text-[10px] font-bold uppercase cursor-pointer flex items-center gap-1 px-2 py-1 rounded-md border transition-all ${
-                    !schemaText.trim()
+                  className={`text-[10px] font-bold uppercase cursor-pointer flex items-center gap-1 px-2 py-1 rounded-md border transition-all ${!schemaText.trim()
                       ? "opacity-45 cursor-not-allowed text-slate-500 border-slate-500/10 bg-transparent"
                       : isDarkMode
-                      ? "text-teal-400 border-teal-500/25 bg-teal-500/5 bg-teal-500/10"
-                      : "text-teal-600 border-teal-500/25 bg-teal-500/5 hover:bg-teal-500/10"
-                  }`}
+                        ? "text-teal-400 border-teal-500/25 bg-teal-500/5 bg-teal-500/10"
+                        : "text-teal-600 border-teal-500/25 bg-teal-500/5 hover:bg-teal-500/10"
+                    }`}
                 >
-                  <Sparkles size={11} />
+                  {/* <Sparkles size={11} /> */}
                   <span>Format</span>
                 </button>
 
@@ -232,13 +226,12 @@ export default function Sidebar({
                       console.error(e);
                     }
                   }}
-                  className={`text-[10px] font-bold uppercase cursor-pointer flex items-center gap-1 px-2 py-1 rounded-md border transition-all ${
-                    !schemaText.trim()
+                  className={`text-[10px] font-bold uppercase cursor-pointer flex items-center gap-1 px-2 py-1 rounded-md border transition-all ${!schemaText.trim()
                       ? "opacity-45 cursor-not-allowed text-slate-500 border-slate-500/10 bg-transparent"
                       : copied
-                      ? "text-emerald-500 border-emerald-500 bg-emerald-500/10"
-                      : "text-slate-500 hover:text-slate-400 border-slate-500/20 bg-slate-500/5 hover:bg-slate-500/10"
-                  }`}
+                        ? "text-emerald-500 border-emerald-500 bg-emerald-500/10"
+                        : "text-slate-500 hover:text-slate-400 border-slate-500/20 bg-slate-500/5 hover:bg-slate-500/10"
+                    }`}
                 >
                   {copied ? (
                     <>
@@ -258,27 +251,25 @@ export default function Sidebar({
                   type="button"
                   disabled={!schemaText.trim()}
                   onClick={handleClearClick}
-                  className={`text-[10px] font-bold uppercase cursor-pointer flex items-center gap-1 px-2 py-1 rounded-md border transition-all ${
-                    !schemaText.trim()
+                  className={`text-[10px] font-bold uppercase cursor-pointer flex items-center gap-1 px-2 py-1 rounded-md border transition-all ${!schemaText.trim()
                       ? "opacity-40 cursor-not-allowed text-slate-500 border-slate-500/10 bg-transparent"
                       : showClearConfirm
-                      ? "text-amber-500 bg-amber-500/15 border-amber-500/30 animate-pulse font-extrabold"
-                      : "text-rose-500 hover:text-rose-400 bg-rose-500/5 hover:bg-rose-500/10 border-rose-500/20"
-                  }`}
+                        ? "text-amber-500 bg-amber-500/15 border-amber-500/30 animate-pulse font-extrabold"
+                        : "text-rose-500 hover:text-rose-400 bg-rose-500/5 hover:bg-rose-500/10 border-rose-500/20"
+                    }`}
                 >
-                  <Trash2 size={11} /> 
+                  <Trash2 size={11} />
                   <span>{showClearConfirm ? "Sure?" : "Clear"}</span>
                 </button>
               </div>
             </div>
 
             {/* Interactive syntax highlighted editor panel wrapper */}
-            <div 
-              className={`relative w-full flex-1 min-h-[140px] rounded-xl border flex flex-col overflow-hidden transition-all duration-200 ${
-                isDarkMode 
-                  ? "bg-slate-950 border-slate-800" 
+            <div
+              className={`relative w-full flex-1 min-h-[140px] rounded-xl border flex flex-col overflow-hidden transition-all duration-200 ${isDarkMode
+                  ? "bg-slate-950 border-slate-800"
                   : "bg-white border-slate-200"
-              }`}
+                }`}
             >
               {/* Underlying styled render engine */}
               <div
@@ -299,11 +290,10 @@ export default function Sidebar({
                 onChange={(e) => onSchemaChange(e.target.value)}
                 onScroll={handleScroll}
                 placeholder="// Paste your Prisma schema here...&#10;model Blog {&#10;  id Int @id&#10;}"
-                className={`absolute inset-0 w-full h-full p-3.5 bg-transparent outline-none border-0 font-mono text-xs leading-relaxed resize-none overflow-auto font-medium focus:ring-0 ${
-                  isDarkMode 
-                    ? "caret-indigo-400 placeholder-slate-700" 
+                className={`absolute inset-0 w-full h-full p-3.5 bg-transparent outline-none border-0 font-mono text-xs leading-relaxed resize-none overflow-auto font-medium focus:ring-0 ${isDarkMode
+                    ? "caret-indigo-400 placeholder-slate-700"
                     : "caret-indigo-500 placeholder-slate-400"
-                }`}
+                  }`}
                 style={{
                   WebkitTextFillColor: "transparent",
                   whiteSpace: "pre",
@@ -320,13 +310,12 @@ export default function Sidebar({
               onDragLeave={handleDragLeave}
               onDrop={handleDrop}
               onClick={triggerFileSelect}
-              className={`border-2 border-dashed rounded-xl p-4 text-center cursor-pointer transition-all duration-200 select-none ${
-                isDragging
+              className={`border-2 border-dashed rounded-xl p-4 text-center cursor-pointer transition-all duration-200 select-none ${isDragging
                   ? "border-indigo-500 bg-indigo-500/10 scale-[0.98]"
                   : isDarkMode
-                  ? "border-slate-800 hover:border-slate-700 bg-slate-950/45 text-slate-400 hover:text-slate-200"
-                  : "border-slate-300 hover:border-slate-400 bg-white text-slate-500 hover:text-slate-700"
-              }`}
+                    ? "border-slate-800 hover:border-slate-700 bg-slate-950/45 text-slate-400 hover:text-slate-200"
+                    : "border-slate-300 hover:border-slate-400 bg-white text-slate-500 hover:text-slate-700"
+                }`}
             >
               <input
                 type="file"
@@ -347,9 +336,8 @@ export default function Sidebar({
 
           {/* Syntax Cheat Sheet */}
           <div
-            className={`p-3.5 rounded-xl border leading-relaxed text-xs shrink-0 mt-auto ${
-              isDarkMode ? "bg-slate-950/60 border-slate-800 text-slate-300" : "bg-white border-slate-200 text-slate-600"
-            }`}
+            className={`p-3.5 rounded-xl border leading-relaxed text-xs shrink-0 mt-auto ${isDarkMode ? "bg-slate-950/60 border-slate-800 text-slate-300" : "bg-white border-slate-200 text-slate-600"
+              }`}
           >
             <div className="flex items-center gap-1.5 font-bold mb-2 text-slate-400">
               <BookOpen size={14} className="text-indigo-500" />
@@ -396,11 +384,10 @@ export default function Sidebar({
         id="btn-sidebar-toggle"
         onClick={onToggle}
         title={isOpen ? "Collapse Sidebar" : "Expand Sidebar"}
-        className={`absolute top-1/2 -right-4 -translate-y-1/2 w-4 h-16 rounded-r-lg flex items-center justify-center border-y border-r shadow-md z-40 cursor-pointer hover:bg-indigo-600 hover:text-white transition-all ${
-          isDarkMode
+        className={`absolute top-1/2 -right-4 -translate-y-1/2 w-4 h-16 rounded-r-lg flex items-center justify-center border-y border-r shadow-md z-40 cursor-pointer hover:bg-indigo-600 hover:text-white transition-all ${isDarkMode
             ? "bg-slate-900 border-slate-800 text-slate-400"
             : "bg-slate-50 border-slate-200 text-slate-500"
-        }`}
+          }`}
       >
         {isOpen ? <ChevronLeft size={12} /> : <ChevronRight size={12} />}
       </button>
