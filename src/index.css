@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:is(.dark *));
+
 @keyframes dashScroll {
   to {
     stroke-dashoffset: -20;
