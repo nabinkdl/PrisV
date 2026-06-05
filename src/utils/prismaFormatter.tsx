@@ -1,7 +1,3 @@
-/**
- * @license
- * SPDX-License-Identifier: Apache-2.0
- */
 
 import React from "react";
 
@@ -14,7 +10,7 @@ export function formatPrismaSchema(code: string): string {
 
   const lines = code.split("\n");
   const formattedLines: string[] = [];
-  
+
   let currentBlockType: "model" | "enum" | "datasource" | "generator" | null = null;
   let currentBlockLines: string[] = [];
 
@@ -153,7 +149,7 @@ function formatModelBlock(lines: string[]): string[] {
     } else {
       const paddedName = f.name.padEnd(maxNameLen);
       const paddedType = f.type.padEnd(maxTypeLen);
-      
+
       let lineOutput = `  ${paddedName} ${paddedType}`;
       if (f.attributes) {
         lineOutput += ` ${f.attributes}`;
@@ -274,7 +270,7 @@ export function highlightPrismaLine(line: string, lineIdx: number, isDarkMode: b
     } else if ((match = wordReg.exec(remaining))) {
       const word = match[1];
       const builtInTypes = ["Int", "String", "Boolean", "DateTime", "Float", "Decimal", "Json", "Bytes", "BigInt"];
-      
+
       if (builtInTypes.includes(word)) {
         tokens.push({ text: word, className: "text-blue-500 font-bold dark:text-blue-400" });
       } else {

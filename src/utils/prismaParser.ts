@@ -1,7 +1,3 @@
-/**
- * @license
- * SPDX-License-Identifier: Apache-2.0
- */
 
 import { PrismaModel, PrismaField, PrismaRelation, VisualEdge, PrismaEnum } from "../types";
 
@@ -173,14 +169,14 @@ export function parsePrismaSchema(schemaText: string): { models: PrismaModel[]; 
       // Parse block-level IDs e.g. @@id([userId, followerId])
       const idMatch = attr.match(/@@id\s*\(\s*(?:fields\s*:\s*)?\[\s*([^\]]+)\s*\]/);
       if (idMatch) {
-         const fields = idMatch[1].split(",").map(f => f.trim().replace(/["']/g, ""));
-         blockIds.push(...fields);
+        const fields = idMatch[1].split(",").map(f => f.trim().replace(/["']/g, ""));
+        blockIds.push(...fields);
       }
       // Parse block-level uniques e.g. @@unique([email, nickname])
       const uniqueMatch = attr.match(/@@unique\s*\(\s*(?:fields\s*:\s*)?\[\s*([^\]]+)\s*\]/);
       if (uniqueMatch) {
-         const fields = uniqueMatch[1].split(",").map(f => f.trim().replace(/["']/g, ""));
-         blockUniques.push(...fields);
+        const fields = uniqueMatch[1].split(",").map(f => f.trim().replace(/["']/g, ""));
+        blockUniques.push(...fields);
       }
     }
 
@@ -199,12 +195,12 @@ export function parsePrismaSchema(schemaText: string): { models: PrismaModel[]; 
     if (!hasExplicitId) {
       const fallbackIdField = model.fields.find(f => {
         const nameLower = f.name.toLowerCase();
-        return nameLower === "id" || 
-               nameLower === "_id" || 
-               nameLower === "uid" || 
-               nameLower === "uuid" ||
-               nameLower === `${model.name.toLowerCase()}id` ||
-               nameLower === `${model.name.toLowerCase()}_id`;
+        return nameLower === "id" ||
+          nameLower === "_id" ||
+          nameLower === "uid" ||
+          nameLower === "uuid" ||
+          nameLower === `${model.name.toLowerCase()}id` ||
+          nameLower === `${model.name.toLowerCase()}_id`;
       });
       if (fallbackIdField) {
         fallbackIdField.isId = true;
@@ -267,7 +263,7 @@ export function parsePrismaSchema(schemaText: string): { models: PrismaModel[]; 
       for (const lineRaw of lines) {
         const line = lineRaw.trim();
         if (!line) continue;
-        
+
         // Match enum value (identifiers)
         const valMatch = line.match(/^([A-Za-z0-9_]+)/);
         if (valMatch) {
@@ -341,10 +337,10 @@ export function deriveVisualEdges(models: PrismaModel[]): VisualEdge[] {
           if (!processedRelations.has(pairKeyStr)) {
             // Check back field
             const backField = targetModel.fields.find(f => f.baseType === model.name);
-            
+
             // Let's check relation attributes or names to match
             const hasExplicitRelationOpposite = backField?.relation && backField.relation.fields && backField.relation.references;
-            
+
             if (hasExplicitRelationOpposite) {
               // This is just the other side of an explicit relation, so we don't draw an extra implicit line
               continue;

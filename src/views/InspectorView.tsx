@@ -1,7 +1,3 @@
-/**
- * @license
- * SPDX-License-Identifier: Apache-2.0
- */
 
 import React, { useState } from "react";
 import { PrismaModel, PrismaEnum } from "../types";
@@ -47,11 +43,10 @@ export default function Inspector({
         id="btn-inspector-toggle"
         onClick={onToggle}
         title={isOpen ? "Collapse Inspector" : "Expand Inspector"}
-        className={`absolute top-1/2 -left-4 -translate-y-1/2 w-4 h-16 rounded-l-lg flex items-center justify-center border-y border-l shadow-md z-40 cursor-pointer hover:bg-indigo-600 hover:text-white transition-all ${
-          isDarkMode
+        className={`absolute top-1/2 -left-4 -translate-y-1/2 w-4 h-16 rounded-l-lg flex items-center justify-center border-y border-l shadow-md z-40 cursor-pointer hover:bg-indigo-600 hover:text-white transition-all ${isDarkMode
             ? "bg-slate-100 border-slate-800 text-slate-400"
             : "bg-indigo-300 border-slate-200 text-slate-500"
-        }`}
+          }`}
       >
         {isOpen ? <ChevronRight size={12} /> : <ChevronLeft size={12} />}
       </button>
@@ -59,13 +54,11 @@ export default function Inspector({
       {/* Inspector drawer panel */}
       <div
         id="inspector-panel"
-        className={`transition-all duration-300 h-full flex flex-col border-l shadow-md z-30 ${
-          isOpen ? "w-[360px] opacity-100" : "w-0 opacity-0 overflow-hidden pointer-events-none"
-        } ${
-          isDarkMode
+        className={`transition-all duration-300 h-full flex flex-col border-l shadow-md z-30 ${isOpen ? "w-[360px] opacity-100" : "w-0 opacity-0 overflow-hidden pointer-events-none"
+          } ${isDarkMode
             ? "bg-slate-900 border-slate-800 text-slate-100"
             : "bg-slate-50 border-slate-200 text-slate-800"
-        }`}
+          }`}
       >
         {selectedModel ? (
           <div className="flex-1 flex flex-col h-full min-h-0">
@@ -87,33 +80,30 @@ export default function Inspector({
               <button
                 id="tab-specs"
                 onClick={() => setActiveTab("specs")}
-                className={`flex-1 py-3 transition-colors border-b-2 ${
-                  activeTab === "specs"
+                className={`flex-1 py-3 transition-colors border-b-2 ${activeTab === "specs"
                     ? "border-indigo-600 text-indigo-600 dark:text-indigo-400 dark:border-indigo-500"
                     : "border-transparent text-slate-400 hover:text-slate-500 dark:hover:text-slate-350"
-                }`}
+                  }`}
               >
                 Field Design
               </button>
               <button
                 id="tab-typescript"
                 onClick={() => setActiveTab("typescript")}
-                className={`flex-1 py-3 transition-colors border-b-2 ${
-                  activeTab === "typescript"
+                className={`flex-1 py-3 transition-colors border-b-2 ${activeTab === "typescript"
                     ? "border-indigo-600 text-indigo-600 dark:text-indigo-400 dark:border-indigo-550"
                     : "border-transparent text-slate-400 hover:text-slate-500 dark:hover:text-slate-350"
-                }`}
+                  }`}
               >
                 Typescript
               </button>
               <button
                 id="tab-sql"
                 onClick={() => setActiveTab("sql")}
-                className={`flex-1 py-3 transition-colors border-b-2 ${
-                  activeTab === "sql"
+                className={`flex-1 py-3 transition-colors border-b-2 ${activeTab === "sql"
                     ? "border-indigo-600 text-indigo-600 dark:text-indigo-400 dark:border-indigo-550"
                     : "border-transparent text-slate-400 hover:text-slate-500 dark:hover:text-slate-350"
-                }`}
+                  }`}
               >
                 SQL DDL
               </button>
@@ -151,11 +141,10 @@ export default function Inspector({
                           <div
                             key={field.name}
                             onClick={() => onSelectField(field.name)}
-                            className={`p-2 rounded-lg border text-xs flex items-center justify-between cursor-pointer transition-all ${
-                              isSelected
+                            className={`p-2 rounded-lg border text-xs flex items-center justify-between cursor-pointer transition-all ${isSelected
                                 ? "bg-indigo-600/10 border-indigo-500/40"
                                 : "hover:bg-slate-500/5 border-transparent"
-                            }`}
+                              }`}
                           >
                             <div className="flex items-center gap-1.5 min-w-0">
                               <span className="font-mono font-semibold truncate text-[12px]">
@@ -319,7 +308,7 @@ export default function Inspector({
                   </button>
                 </div>
                 <pre className="bg-slate-950/80 p-3 rounded-xl font-mono text-[11px] text-violet-300 overflow-auto leading-relaxed">
-{`export enum ${selectedEnum.name} {
+                  {`export enum ${selectedEnum.name} {
 ${selectedEnum.values.map(v => `  ${v} = "${v}",`).join("\n")}
 }`}
                 </pre>

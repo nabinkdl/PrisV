@@ -1,7 +1,3 @@
-/**
- * @license
- * SPDX-License-Identifier: Apache-2.0
- */
 
 import React, { useState, useRef } from "react";
 import { Upload, Download, FileCode, Check, AlertCircle, HelpCircle, ChevronLeft, ChevronRight, BookOpen, Trash2, Key, Lock, Link, ChevronDown, ChevronUp } from "lucide-react";
@@ -166,8 +162,8 @@ export default function Sidebar({
           </div>
           <span
             className={`px-2.5 py-0.5 rounded-full text-xs font-mono font-bold flex items-center gap-1 ${parsedModels.length > 0
-                ? "bg-emerald-500/10 text-emerald-500"
-                : "bg-amber-500/15 text-amber-500"
+              ? "bg-emerald-500/10 text-emerald-500"
+              : "bg-amber-500/15 text-amber-500"
               }`}
           >
             {parsedModels.length > 0 ? (
@@ -203,10 +199,10 @@ export default function Sidebar({
                     }
                   }}
                   className={`text-[10px] font-bold uppercase cursor-pointer flex items-center gap-1 px-2 py-1 rounded-md border transition-all ${!schemaText.trim()
-                      ? "opacity-45 cursor-not-allowed text-slate-500 border-slate-500/10 bg-transparent"
-                      : isDarkMode
-                        ? "text-teal-400 border-teal-500/25 bg-teal-500/5 bg-teal-500/10"
-                        : "text-teal-600 border-teal-500/25 bg-teal-500/5 hover:bg-teal-500/10"
+                    ? "opacity-45 cursor-not-allowed text-slate-500 border-slate-500/10 bg-transparent"
+                    : isDarkMode
+                      ? "text-teal-400 border-teal-500/25 bg-teal-500/5 bg-teal-500/10"
+                      : "text-teal-600 border-teal-500/25 bg-teal-500/5 hover:bg-teal-500/10"
                     }`}
                 >
                   {/* <Sparkles size={11} /> */}
@@ -228,10 +224,10 @@ export default function Sidebar({
                     }
                   }}
                   className={`text-[10px] font-bold uppercase cursor-pointer flex items-center gap-1 px-2 py-1 rounded-md border transition-all ${!schemaText.trim()
-                      ? "opacity-45 cursor-not-allowed text-slate-500 border-slate-500/10 bg-transparent"
-                      : copied
-                        ? "text-emerald-500 border-emerald-500 bg-emerald-500/10"
-                        : "text-slate-500 hover:text-slate-400 border-slate-500/20 bg-slate-500/5 hover:bg-slate-500/10"
+                    ? "opacity-45 cursor-not-allowed text-slate-500 border-slate-500/10 bg-transparent"
+                    : copied
+                      ? "text-emerald-500 border-emerald-500 bg-emerald-500/10"
+                      : "text-slate-500 hover:text-slate-400 border-slate-500/20 bg-slate-500/5 hover:bg-slate-500/10"
                     }`}
                 >
                   {copied ? (
@@ -253,10 +249,10 @@ export default function Sidebar({
                   disabled={!schemaText.trim()}
                   onClick={handleClearClick}
                   className={`text-[10px] font-bold uppercase cursor-pointer flex items-center gap-1 px-2 py-1 rounded-md border transition-all ${!schemaText.trim()
-                      ? "opacity-40 cursor-not-allowed text-slate-500 border-slate-500/10 bg-transparent"
-                      : showClearConfirm
-                        ? "text-amber-500 bg-amber-500/15 border-amber-500/30 animate-pulse font-extrabold"
-                        : "text-rose-500 hover:text-rose-400 bg-rose-500/5 hover:bg-rose-500/10 border-rose-500/20"
+                    ? "opacity-40 cursor-not-allowed text-slate-500 border-slate-500/10 bg-transparent"
+                    : showClearConfirm
+                      ? "text-amber-500 bg-amber-500/15 border-amber-500/30 animate-pulse font-extrabold"
+                      : "text-rose-500 hover:text-rose-400 bg-rose-500/5 hover:bg-rose-500/10 border-rose-500/20"
                     }`}
                 >
                   <Trash2 size={11} />
@@ -268,8 +264,8 @@ export default function Sidebar({
             {/* Interactive syntax highlighted editor panel wrapper */}
             <div
               className={`relative w-full flex-1 min-h-[140px] rounded-xl border flex flex-col overflow-hidden transition-all duration-200 ${isDarkMode
-                  ? "bg-slate-950 border-slate-800"
-                  : "bg-white border-slate-200"
+                ? "bg-slate-950 border-slate-800"
+                : "bg-white border-slate-200"
                 }`}
             >
               {/* Underlying styled render engine */}
@@ -292,8 +288,8 @@ export default function Sidebar({
                 onScroll={handleScroll}
                 placeholder="// Paste your Prisma schema here...&#10;model Blog {&#10;  id Int @id&#10;}"
                 className={`absolute inset-0 w-full h-full p-3.5 bg-transparent outline-none border-0 font-mono text-xs leading-relaxed resize-none overflow-auto font-medium focus:ring-0 ${isDarkMode
-                    ? "caret-indigo-400 placeholder-slate-700"
-                    : "caret-indigo-500 placeholder-slate-400"
+                  ? "caret-indigo-400 placeholder-slate-700"
+                  : "caret-indigo-500 placeholder-slate-400"
                   }`}
                 style={{
                   WebkitTextFillColor: "transparent",
@@ -312,10 +308,10 @@ export default function Sidebar({
               onDrop={handleDrop}
               onClick={triggerFileSelect}
               className={`border-2 border-dashed rounded-xl p-4 text-center cursor-pointer transition-all duration-200 select-none ${isDragging
-                  ? "border-indigo-500 bg-indigo-500/10 scale-[0.98]"
-                  : isDarkMode
-                    ? "border-slate-800 hover:border-slate-700 bg-slate-950/45 text-slate-400 hover:text-slate-200"
-                    : "border-slate-300 hover:border-slate-400 bg-white text-slate-500 hover:text-slate-700"
+                ? "border-indigo-500 bg-indigo-500/10 scale-[0.98]"
+                : isDarkMode
+                  ? "border-slate-800 hover:border-slate-700 bg-slate-950/45 text-slate-400 hover:text-slate-200"
+                  : "border-slate-300 hover:border-slate-400 bg-white text-slate-500 hover:text-slate-700"
                 }`}
             >
               <input
@@ -353,41 +349,41 @@ export default function Sidebar({
                 {isCheatSheetOpen ? <ChevronDown size={14} /> : <ChevronUp size={14} />}
               </div>
             </button>
-            
+
             {isCheatSheetOpen && (
               <div className="px-3.5 pb-3.5 pt-0">
                 <ul className="space-y-2.5 font-medium text-[11px]">
-              <li className="flex items-start gap-2">
-                <Key size={12} className="text-amber-500 shrink-0 mt-0.5" />
-                <span>
-                  <code className="font-mono text-indigo-500 bg-slate-500/10 px-1 rounded font-semibold">@id</code>: Denotes the Primary Key of a Model.
-                </span>
-              </li>
-              <li className="flex items-start gap-2">
-                <Lock size={12} className="text-emerald-500 shrink-0 mt-0.5" />
-                <span>
-                  <code className="font-mono text-emerald-500 bg-slate-500/10 px-1 rounded font-semibold">@unique</code>: Fields with unique constraint.
-                </span>
-              </li>
-              <li className="flex items-start gap-2">
-                <HelpCircle size={12} className="text-slate-400 shrink-0 mt-0.5" />
-                <span>
-                  <code className="font-mono text-amber-500 bg-slate-500/10 px-1 rounded font-semibold">Type?</code>: Appends &apos;?&apos; for Nullable/Optional.
-                </span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="font-mono text-purple-500 border border-purple-500/30 px-1 py-0.2 rounded text-[9px] leading-none bg-purple-500/5 font-bold shrink-0 mt-0.5">[]</span>
-                <span>
-                  <code className="font-mono text-purple-500 bg-slate-500/10 px-1 rounded font-semibold">Type[]</code>: Multi-record arrays (Lists).
-                </span>
-              </li>
-              <li className="flex items-start gap-2">
-                <Link size={12} className="text-blue-500 shrink-0 mt-0.5" />
-                <span>
-                  <code className="font-mono text-blue-500 bg-slate-500/10 px-1 rounded font-semibold">@relation(...)</code>: Defines explicit primary-foreign links.
-                </span>
-              </li>
-            </ul>
+                  <li className="flex items-start gap-2">
+                    <Key size={12} className="text-amber-500 shrink-0 mt-0.5" />
+                    <span>
+                      <code className="font-mono text-indigo-500 bg-slate-500/10 px-1 rounded font-semibold">@id</code>: Denotes the Primary Key of a Model.
+                    </span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <Lock size={12} className="text-emerald-500 shrink-0 mt-0.5" />
+                    <span>
+                      <code className="font-mono text-emerald-500 bg-slate-500/10 px-1 rounded font-semibold">@unique</code>: Fields with unique constraint.
+                    </span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <HelpCircle size={12} className="text-slate-400 shrink-0 mt-0.5" />
+                    <span>
+                      <code className="font-mono text-amber-500 bg-slate-500/10 px-1 rounded font-semibold">Type?</code>: Appends &apos;?&apos; for Nullable/Optional.
+                    </span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="font-mono text-purple-500 border border-purple-500/30 px-1 py-0.2 rounded text-[9px] leading-none bg-purple-500/5 font-bold shrink-0 mt-0.5">[]</span>
+                    <span>
+                      <code className="font-mono text-purple-500 bg-slate-500/10 px-1 rounded font-semibold">Type[]</code>: Multi-record arrays (Lists).
+                    </span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <Link size={12} className="text-blue-500 shrink-0 mt-0.5" />
+                    <span>
+                      <code className="font-mono text-blue-500 bg-slate-500/10 px-1 rounded font-semibold">@relation(...)</code>: Defines explicit primary-foreign links.
+                    </span>
+                  </li>
+                </ul>
               </div>
             )}
           </div>
@@ -400,8 +396,8 @@ export default function Sidebar({
         onClick={onToggle}
         title={isOpen ? "Collapse Sidebar" : "Expand Sidebar"}
         className={`absolute top-1/2 -right-4 -translate-y-1/2 w-4 h-16 rounded-r-lg flex items-center justify-center border-y border-r shadow-md z-40 cursor-pointer hover:bg-indigo-600 hover:text-white transition-all ${isDarkMode
-            ? "bg-slate-900 border-slate-800 text-slate-400"
-            : "bg-slate-50 border-slate-200 text-slate-500"
+          ? "bg-slate-900 border-slate-800 text-slate-400"
+          : "bg-slate-50 border-slate-200 text-slate-500"
           }`}
       >
         {isOpen ? <ChevronLeft size={12} /> : <ChevronRight size={12} />}

@@ -1,7 +1,3 @@
-/**
- * @license
- * SPDX-License-Identifier: Apache-2.0
- */
 
 import React from "react";
 import SidebarView from "./SidebarView";
@@ -19,9 +15,8 @@ export default function AppView() {
 
   return (
     <div
-      className={`${appModel.isDarkMode ? "dark " : ""}flex flex-col h-screen w-screen overflow-hidden font-sans transition-colors duration-300 ${
-        appModel.isDarkMode ? "bg-slate-950 text-slate-100" : "bg-slate-50 text-slate-800"
-      }`}
+      className={`${appModel.isDarkMode ? "dark " : ""}flex flex-col h-screen w-screen overflow-hidden font-sans transition-colors duration-300 ${appModel.isDarkMode ? "bg-slate-950 text-slate-100" : "bg-slate-50 text-slate-800"
+        }`}
     >
       {/* Primary Dashboard Grid split */}
       <div className="flex-1 flex overflow-hidden min-h-0 relative">
