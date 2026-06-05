@@ -278,6 +278,17 @@ export function parsePrismaSchema(schemaText: string): { models: PrismaModel[]; 
     enumIndex = scanIndex;
   }
 
+  // 5. Final check for relation fields (enums are not relations)
+  for (const model of models) {
+    for (const field of model.fields) {
+      if (enums.some(e => e.name === field.baseType)) {
+        field.isRelationField = false;
+      } else if (models.some(m => m.name === field.baseType)) {
+        field.isRelationField = true;
+      }
+    }
+  }
+
   return { models, enums };
 }
 
@@ -297,17 +308,20 @@ export function deriveVisualEdges(models: PrismaModel[]): VisualEdge[] {
         const targetModel = models.find(m => m.name === targetModelName);
         if (!targetModel) continue;
 
+        // Check back field
+        const backField = targetModel.fields.find(f => f.baseType === model.name);
+
         // Generate a standard alphabetical signature so we don't duplicate bidirectional edges
-        const pairKeyStr = [model.name, targetModelName].sort().join("<=>");
+        const relName = field.relation?.name || backField?.relation?.name || "";
+        const pairKeyStr = [model.name, targetModelName, relName].sort().join("<=>");
 
         // 1. Explicit Relation check with fields and references
         if (field.relation && field.relation.fields && field.relation.references) {
-          const localField = field.relation.fields[0];
-          const foreignField = field.relation.references[0];
+          const localFieldsStr = field.relation.fields.join(", ");
+          const foreignFieldsStr = field.relation.references.join(", ");
 
           // Determine relationship type:
           // Check the back-relation in targetModel to see if it is list or singular
-          const backField = targetModel.fields.find(f => f.baseType === model.name);
           let relationType: "1-1" | "1-n" | "n-n" = "1-n";
 
           if (backField) {
@@ -323,9 +337,9 @@ export function deriveVisualEdges(models: PrismaModel[]): VisualEdge[] {
           edges.push({
             id: `edge-${model.name}-${field.name}-${targetModelName}`,
             fromModel: model.name,
-            fromField: localField || field.name,
+            fromField: localFieldsStr || field.name,
             toModel: targetModelName,
-            toField: foreignField || "id",
+            toField: foreignFieldsStr || "id",
             relationType,
             isImplicit: false,
             rawRelationText: `@relation(fields: [${field.relation.fields.join(", ")}], references: [${field.relation.references.join(", ")}])`,
@@ -335,9 +349,6 @@ export function deriveVisualEdges(models: PrismaModel[]): VisualEdge[] {
         } else {
           // Check if this is an implicit relation already handled or needs creation
           if (!processedRelations.has(pairKeyStr)) {
-            // Check back field
-            const backField = targetModel.fields.find(f => f.baseType === model.name);
-
             // Let's check relation attributes or names to match
             const hasExplicitRelationOpposite = backField?.relation && backField.relation.fields && backField.relation.references;
 

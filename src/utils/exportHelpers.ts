@@ -19,7 +19,7 @@ export function generateFullSQL(models: PrismaModel[], enums: PrismaEnum[] = [])
     sql += `-- 1. Custom Postgres Enums\n`;
     sql += `-- =====================================================\n\n`;
     for (const enumItem of enums) {
-      const vals = enumItem.values.map(v => `'${v}'`).join(", ");
+      const vals = enumItem.values.map(v => `'${v.replace(/'/g, "''")}'`).join(", ");
       sql += `CREATE TYPE "${enumItem.name}" AS ENUM (${vals});\n`;
     }
     sql += `\n`;
@@ -47,7 +47,7 @@ export function generateFullSQL(models: PrismaModel[], enums: PrismaEnum[] = [])
       if (isEnum) {
         type = `"${field.baseType}"`;
       } else if (baseL === "int") {
-        type = field.isId ? "SERIAL" : "INT";
+        type = (field.isId && field.defaultValue === "autoincrement()") ? "SERIAL" : "INT";
       } else if (baseL === "string") {
         type = "VARCHAR(255)";
       } else if (baseL === "boolean") {
@@ -63,7 +63,7 @@ export function generateFullSQL(models: PrismaModel[], enums: PrismaEnum[] = [])
       } else if (baseL === "bytes") {
         type = "BYTEA";
       } else if (baseL === "bigint") {
-        type = "BIGINT";
+        type = (field.isId && field.defaultValue === "autoincrement()") ? "BIGSERIAL" : "BIGINT";
       }
 
       let colDef = `  "${field.name}" ${type}`;
@@ -82,19 +82,14 @@ export function generateFullSQL(models: PrismaModel[], enums: PrismaEnum[] = [])
 
       if (field.defaultValue) {
         if (field.defaultValue === "autoincrement()") {
-          // Handled implicitly by SERIAL type in postgres
-          if (baseL !== "int") {
-            colDef += " DEFAULT nextval(...)";
-          }
+          // Handled implicitly by SERIAL/BIGSERIAL type in postgres
         } else if (field.defaultValue === "now()") {
           colDef += " DEFAULT CURRENT_TIMESTAMP";
-        } else if (field.defaultValue === "uuid()") {
-          colDef += " DEFAULT gen_random_uuid()";
-        } else if (field.defaultValue === "cuid()") {
-          colDef += " DEFAULT generate_cuid()";
+        } else if (field.defaultValue === "uuid()" || field.defaultValue === "cuid()") {
+          // Omit DEFAULT in SQL; handled by Prisma at the application level
         } else {
           if (isEnum) {
-            colDef += ` DEFAULT '${field.defaultValue}'`;
+            colDef += ` DEFAULT '${field.defaultValue.replace(/'/g, "''")}'`;
           } else {
             colDef += ` DEFAULT ${field.defaultValue}`;
           }
@@ -165,7 +160,11 @@ export function generateFullTypeScript(models: PrismaModel[], enums: PrismaEnum[
         type += "[]";
       }
 
-      ts += `  ${field.name}${field.isOptional ? "?" : ""}: ${type};\n`;
+      let line = `  ${field.name}${field.isOptional ? "?" : ""}: ${type};`;
+      if (field.defaultValue) {
+        line += ` // @default(${field.defaultValue})`;
+      }
+      ts += line + "\n";
     }
     ts += `}\n\n`;
   }

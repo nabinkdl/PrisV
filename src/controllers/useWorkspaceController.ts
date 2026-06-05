@@ -24,6 +24,14 @@ export function useWorkspaceController({
   nodePositions,
 }: WorkspaceControllerProps) {
 
+  const zoomRef = React.useRef(zoomScale);
+  const panRef = React.useRef(panOffset);
+
+  React.useEffect(() => {
+    zoomRef.current = zoomScale;
+    panRef.current = panOffset;
+  }, [zoomScale, panOffset]);
+
   const adjustZoomCentered = (newScale: number) => {
     if (!model.containerRef.current) {
       onZoomScaleChange(newScale);
@@ -33,8 +41,11 @@ export function useWorkspaceController({
     const centerX = rect.width / 2;
     const centerY = rect.height / 2;
 
-    const canvasX = (centerX - panOffset.x) / zoomScale;
-    const canvasY = (centerY - panOffset.y) / zoomScale;
+    const currentZoom = zoomRef.current;
+    const currentPan = panRef.current;
+
+    const canvasX = (centerX - currentPan.x) / currentZoom;
+    const canvasY = (centerY - currentPan.y) / currentZoom;
 
     const newPanX = centerX - canvasX * newScale;
     const newPanY = centerY - canvasY * newScale;
@@ -55,10 +66,10 @@ export function useWorkspaceController({
         model.setIsSpacePressed(true);
       } else if (e.key === "=" || e.key === "+") {
         e.preventDefault();
-        adjustZoomCentered(Math.min(3.0, zoomScale + 0.15));
+        adjustZoomCentered(Math.min(3.0, zoomRef.current + 0.15));
       } else if (e.key === "-") {
         e.preventDefault();
-        adjustZoomCentered(Math.max(0.15, zoomScale - 0.15));
+        adjustZoomCentered(Math.max(0.15, zoomRef.current - 0.15));
       } else if (e.key === "0") {
         e.preventDefault();
         onZoomScaleChange(1.0);
@@ -166,7 +177,7 @@ export function useWorkspaceController({
       model.setIsPanning(true);
       model.panStartRef.current = { x: e.clientX, y: e.clientY };
       model.offsetStartRef.current = { ...panOffset };
-      if (isMiddleClick || isCanvasClick) {
+      if (isMiddleClick || isCanvasClick || isSpacePan) {
         e.preventDefault();
       }
     }

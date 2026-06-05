@@ -92,20 +92,24 @@ export function useAppModel() {
   useEffect(() => {
     if (parsedModels.length === 0 && parsedEnums.length === 0) return;
 
-    const hasUnpositionedModel = parsedModels.some((m) => !nodePositions[m.name]);
-    const hasUnpositionedEnum = parsedEnums.some((e) => !nodePositions[e.name]);
-    if (hasUnpositionedModel || hasUnpositionedEnum) {
-      const freshGrid = computeGridLayout(parsedModels, parsedEnums);
-      setNodePositions((prev) => {
+    setNodePositions((prev) => {
+      const validNames = new Set([...parsedModels.map(m => m.name), ...parsedEnums.map(e => e.name)]);
+      const hasUnpositionedModel = parsedModels.some((m) => !prev[m.name]);
+      const hasUnpositionedEnum = parsedEnums.some((e) => !prev[e.name]);
+      const hasOrphanedNodes = Object.keys(prev).some(key => !validNames.has(key));
+
+      if (hasUnpositionedModel || hasUnpositionedEnum || hasOrphanedNodes) {
+        const freshGrid = computeGridLayout(parsedModels, parsedEnums);
         const mergedGrid = { ...freshGrid };
         Object.keys(prev).forEach((key) => {
-          if (parsedModels.some((m) => m.name === key) || parsedEnums.some((e) => e.name === key)) {
+          if (validNames.has(key)) {
             mergedGrid[key] = prev[key];
           }
         });
         return mergedGrid;
-      });
-    }
+      }
+      return prev;
+    });
   }, [parsedModels, parsedEnums]);
 
   useEffect(() => {

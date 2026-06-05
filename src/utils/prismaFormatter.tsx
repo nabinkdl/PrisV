@@ -8,7 +8,9 @@ import React from "react";
 export function formatPrismaSchema(code: string): string {
   if (!code || !code.trim()) return "";
 
-  const lines = code.split("\n");
+  // Strip multiline block comments first to prevent formatting corruption
+  const cleanCode = code.replace(/\/\*[\s\S]*?\*\//g, "");
+  const lines = cleanCode.split("\n");
   const formattedLines: string[] = [];
 
   let currentBlockType: "model" | "enum" | "datasource" | "generator" | null = null;

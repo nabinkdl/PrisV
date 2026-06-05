@@ -16,7 +16,7 @@ export function modelToSQL(model: PrismaModel): string {
     const baseL = field.baseType.toLowerCase();
 
     if (baseL === "int") {
-      type = field.isId ? "SERIAL" : "INT";
+      type = (field.isId && field.defaultValue === "autoincrement()") ? "SERIAL" : "INT";
     } else if (baseL === "string") {
       type = "VARCHAR(255)";
     } else if (baseL === "boolean") {
@@ -32,7 +32,7 @@ export function modelToSQL(model: PrismaModel): string {
     } else if (baseL === "bytes") {
       type = "BYTEA";
     } else if (baseL === "bigint") {
-      type = "BIGINT";
+      type = (field.isId && field.defaultValue === "autoincrement()") ? "BIGSERIAL" : "BIGINT";
     }
 
     let colDef = `  "${field.name}" ${type}`;
@@ -51,16 +51,11 @@ export function modelToSQL(model: PrismaModel): string {
 
     if (field.defaultValue) {
       if (field.defaultValue === "autoincrement()") {
-        // Handled automatically by SERIAL in PostgreSQL
-        if (baseL !== "int") {
-          colDef += " DEFAULT nextval(...)";
-        }
+        // Handled automatically by SERIAL/BIGSERIAL in PostgreSQL
       } else if (field.defaultValue === "now()") {
         colDef += " DEFAULT CURRENT_TIMESTAMP";
-      } else if (field.defaultValue === "uuid()") {
-        colDef += " DEFAULT gen_random_uuid()";
-      } else if (field.defaultValue === "cuid()") {
-        colDef += " DEFAULT generate_cuid()";
+      } else if (field.defaultValue === "uuid()" || field.defaultValue === "cuid()") {
+        // Omit DEFAULT in SQL; handled by Prisma at the application level
       } else {
         colDef += ` DEFAULT ${field.defaultValue}`;
       }
@@ -107,7 +102,11 @@ export function modelToTypeScript(model: PrismaModel): string {
       type += "[]";
     }
 
-    ts += `  ${field.name}${field.isOptional ? "?" : ""}: ${type};\n`;
+    let line = `  ${field.name}${field.isOptional ? "?" : ""}: ${type};`;
+    if (field.defaultValue) {
+      line += ` // @default(${field.defaultValue})`;
+    }
+    ts += line + "\n";
   }
 
   ts += `}`;

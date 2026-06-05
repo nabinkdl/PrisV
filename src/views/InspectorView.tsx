@@ -28,9 +28,12 @@ export default function Inspector({
 
   // Quick Copy command helper
   const handleCopyText = (text: string) => {
-    navigator.clipboard.writeText(text);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    navigator.clipboard.writeText(text).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }).catch(err => {
+      console.error("Clipboard write failed:", err);
+    });
   };
 
   const tsCode = selectedModel ? modelToTypeScript(selectedModel) : "";

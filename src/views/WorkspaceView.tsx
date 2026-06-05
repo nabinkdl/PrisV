@@ -50,29 +50,18 @@ export default function WorkspaceView(props: WorkspaceProps) {
 
   // Calculate field indices to line up heights perfectly
   const getFieldVerticalOffset = (model: PrismaModel, fieldName?: string) => {
-    if (!fieldName) return HEADER_HEIGHT + ROW_HEIGHT / 2;
+    if (!fieldName) return HEADER_HEIGHT + 25;
     const idx = model.fields.findIndex((f) => f.name === fieldName);
     const index = idx === -1 ? 0 : idx;
-    return HEADER_HEIGHT + index * ROW_HEIGHT + ROW_HEIGHT / 2;
+    return HEADER_HEIGHT + 25 + index * 40;
   };
-
-  // Convert screen coordinates to canvas space coordinates
-  const screenToCanvas = (clientX: number, clientY: number) => {
-    if (!wsModel.containerRef.current) return { x: 0, y: 0 };
-    const rect = wsModel.containerRef.current.getBoundingClientRect();
-    return {
-      x: (clientX - rect.left - props.panOffset.x) / props.zoomScale,
-      y: (clientY - rect.top - props.panOffset.y) / props.zoomScale,
-    };
-  };
-
 
   // Check relationship highlights based on selected field or model
   const isRelationHighlighted = (edge: VisualEdge) => {
     if (!props.selectedFieldName || !props.selectedModelName) return false;
 
-    const isFromFieldSelected = edge.fromModel === props.selectedModelName && edge.fromField === props.selectedFieldName;
-    const isToFieldSelected = edge.toModel === props.selectedModelName && edge.toField === props.selectedFieldName;
+    const isFromFieldSelected = edge.fromModel === props.selectedModelName && edge.fromField.split(", ").includes(props.selectedFieldName);
+    const isToFieldSelected = edge.toModel === props.selectedModelName && edge.toField.split(", ").includes(props.selectedFieldName);
 
     if (isFromFieldSelected || isToFieldSelected) return true;
 
@@ -311,8 +300,8 @@ export default function WorkspaceView(props: WorkspaceProps) {
             const posB = props.nodePositions[edge.toModel] || { x: 50, y: 50 };
 
             // Find exact vertical offsets
-            const offsetA = getFieldVerticalOffset(modelFrom, edge.fromField);
-            const offsetB = getFieldVerticalOffset(modelTo, edge.toField);
+            const offsetA = getFieldVerticalOffset(modelFrom, edge.fromField.split(", ")[0]);
+            const offsetB = getFieldVerticalOffset(modelTo, edge.toField.split(", ")[0]);
 
             const isLeftToRight = posA.x + CARD_WIDTH / 2 < posB.x + CARD_WIDTH / 2;
 
@@ -588,7 +577,7 @@ export default function WorkspaceView(props: WorkspaceProps) {
             );
           })}
 
-          {props.enums.map((enumItem) => {
+          {(props.enums || []).map((enumItem) => {
             const pos = props.nodePositions[enumItem.name] || { x: 50, y: 50 };
             const isSelected = props.selectedModelName === enumItem.name;
             const isDragging = wsModel.draggingNode === enumItem.name;
