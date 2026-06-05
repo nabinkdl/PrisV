@@ -4,7 +4,7 @@
  */
 
 import React, { useState, useRef } from "react";
-import { Upload, Download, FileCode, Check, AlertCircle, HelpCircle, ChevronLeft, ChevronRight, BookOpen, Trash2, Key, Lock, Link } from "lucide-react";
+import { Upload, Download, FileCode, Check, AlertCircle, HelpCircle, ChevronLeft, ChevronRight, BookOpen, Trash2, Key, Lock, Link, ChevronDown, ChevronUp } from "lucide-react";
 import { PrismaModel } from "../types";
 import { formatPrismaSchema, highlightPrismaLine } from "../utils/prismaFormatter";
 
@@ -28,6 +28,7 @@ export default function Sidebar({
   onExportClick,
 }: SidebarProps) {
   const [isDragging, setIsDragging] = useState(false);
+  const [isCheatSheetOpen, setIsCheatSheetOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [sidebarWidth, setSidebarWidth] = useState(360);
@@ -336,14 +337,26 @@ export default function Sidebar({
 
           {/* Syntax Cheat Sheet */}
           <div
-            className={`p-3.5 rounded-xl border leading-relaxed text-xs shrink-0 mt-auto ${isDarkMode ? "bg-slate-950/60 border-slate-800 text-slate-300" : "bg-white border-slate-200 text-slate-600"
+            className={`rounded-xl border leading-relaxed text-xs shrink-0 mt-auto transition-all duration-300 ${isDarkMode ? "bg-slate-950/60 border-slate-800 text-slate-300" : "bg-white border-slate-200 text-slate-600"
               }`}
           >
-            <div className="flex items-center gap-1.5 font-bold mb-2 text-slate-400">
-              <BookOpen size={14} className="text-indigo-500" />
-              <span>Prisma DSL Cheat Sheet</span>
-            </div>
-            <ul className="space-y-2.5 font-medium text-[11px]">
+            <button
+              type="button"
+              onClick={() => setIsCheatSheetOpen((prev) => !prev)}
+              className="w-full flex items-center justify-between p-3.5 font-bold text-slate-500 dark:text-slate-300 hover:bg-slate-500/5 transition-colors focus:outline-none cursor-pointer rounded-xl"
+            >
+              <div className="flex items-center gap-1.5">
+                <BookOpen size={14} className="text-indigo-500" />
+                <span>Prisma DSL Cheat Sheet</span>
+              </div>
+              <div className="text-slate-400 hover:text-slate-500 dark:hover:text-slate-200 transition-colors">
+                {isCheatSheetOpen ? <ChevronDown size={14} /> : <ChevronUp size={14} />}
+              </div>
+            </button>
+            
+            {isCheatSheetOpen && (
+              <div className="px-3.5 pb-3.5 pt-0">
+                <ul className="space-y-2.5 font-medium text-[11px]">
               <li className="flex items-start gap-2">
                 <Key size={12} className="text-amber-500 shrink-0 mt-0.5" />
                 <span>
@@ -375,6 +388,8 @@ export default function Sidebar({
                 </span>
               </li>
             </ul>
+              </div>
+            )}
           </div>
         </div>
       </div>

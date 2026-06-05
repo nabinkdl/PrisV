@@ -104,7 +104,7 @@ export default function Workspace({
       if (tag === "INPUT" || tag === "TEXTAREA" || (document.activeElement as HTMLElement)?.isContentEditable) {
         return;
       }
-      
+
       if (e.code === "Space") {
         e.preventDefault();
         setIsSpacePressed(true);
@@ -154,10 +154,10 @@ export default function Workspace({
       if (draggingNode) {
         const dxPx = e.clientX - dragStartMouseRef.current.x;
         const dyPx = e.clientY - dragStartMouseRef.current.y;
-        
+
         let nodeX = dragStartNodePosRef.current.x + dxPx / zoomScale;
         let nodeY = dragStartNodePosRef.current.y + dyPx / zoomScale;
-        
+
         if (isGridSnapping) {
           nodeX = Math.round(nodeX / 15) * 15;
           nodeY = Math.round(nodeY / 15) * 15;
@@ -206,23 +206,23 @@ export default function Workspace({
   const handleWheel = (e: React.WheelEvent) => {
     e.preventDefault();
     if (!containerRef.current) return;
-    
+
     const rect = containerRef.current.getBoundingClientRect();
     const mouseX = e.clientX - rect.left;
     const mouseY = e.clientY - rect.top;
-    
+
     // Calculate canvas coordinate under mouse before zoom
     const canvasX = (mouseX - panOffset.x) / zoomScale;
     const canvasY = (mouseY - panOffset.y) / zoomScale;
-    
+
     const zoomIntensity = 0.05;
     const delta = e.deltaY < 0 ? 1 : -1;
     const newScale = Math.max(0.15, Math.min(3.0, zoomScale + delta * zoomIntensity));
-    
+
     // Project canvas coordinate to new panning coordinates so it stays under mouse
     const newPanX = mouseX - canvasX * newScale;
     const newPanY = mouseY - canvasY * newScale;
-    
+
     onZoomScaleChange(newScale);
     onPanOffsetChange({ x: newPanX, y: newPanY });
   };
@@ -233,21 +233,21 @@ export default function Workspace({
     if (e.button !== 0 && e.button !== 1) return;
 
     const target = e.target as HTMLElement;
-    
+
     // Check if the click targets or is inside interactive elements (inputs, buttons, select, etc.)
-    const isUiInteractive = target.closest("button") || 
-                            target.closest("input") || 
-                            target.closest("span.cursor-pointer") ||
-                            target.closest("a") || 
-                            target.closest("select") || 
-                            target.closest("textarea");
+    const isUiInteractive = target.closest("button") ||
+      target.closest("input") ||
+      target.closest("span.cursor-pointer") ||
+      target.closest("a") ||
+      target.closest("select") ||
+      target.closest("textarea");
 
     // Check if the click is on or inside a model card (node card)
     const isModelCard = target.closest('[id^="node-"]');
 
     const isMiddleClick = e.button === 1;
     const isSpacePan = isSpacePressed && e.button === 0;
-    
+
     // Default click on board backdrop, grid, or empty parts that are not inputs/model cards is a pan space
     const isCanvasClick = !isUiInteractive && !isModelCard;
 
@@ -264,12 +264,12 @@ export default function Workspace({
   // Zoom on empty canvas double click: zooms in towards click position
   const handleDoubleClick = (e: React.MouseEvent) => {
     const target = e.target as HTMLElement;
-    const isUiInteractive = target.closest("button") || 
-                            target.closest("input") || 
-                            target.closest("span.cursor-pointer") ||
-                            target.closest("a") || 
-                            target.closest("select") || 
-                            target.closest("textarea");
+    const isUiInteractive = target.closest("button") ||
+      target.closest("input") ||
+      target.closest("span.cursor-pointer") ||
+      target.closest("a") ||
+      target.closest("select") ||
+      target.closest("textarea");
 
     const isModelCard = target.closest('[id^="node-"]');
 
@@ -279,17 +279,17 @@ export default function Workspace({
       const rect = containerRef.current.getBoundingClientRect();
       const clickX = e.clientX - rect.left;
       const clickY = e.clientY - rect.top;
-      
+
       const canvasX = (clickX - panOffset.x) / zoomScale;
       const canvasY = (clickY - panOffset.y) / zoomScale;
-      
+
       // zoom in by 1.25x or out by 0.75x if Shift is held
       const zoomStep = e.shiftKey ? 0.75 : 1.25;
       const newScale = Math.max(0.15, Math.min(3.0, zoomScale * zoomStep));
-      
+
       const newPanX = clickX - canvasX * newScale;
       const newPanY = clickY - canvasY * newScale;
-      
+
       onZoomScaleChange(newScale);
       onPanOffsetChange({ x: newPanX, y: newPanY });
     }
@@ -300,7 +300,7 @@ export default function Workspace({
     if (e.touches.length === 1) {
       const touch = e.touches[0];
       const target = e.target as HTMLElement;
-      
+
       const isBackground = target === e.currentTarget || target.id === "canvas-grid";
 
       if (isBackground) {
@@ -313,7 +313,7 @@ export default function Workspace({
           const modelName = cardParent.id.replace("node-", "");
           setDraggingNode(modelName);
           onSelectModel(modelName);
-          
+
           const initialPos = nodePositions[modelName] || { x: 50, y: 50 };
           dragStartMouseRef.current = { x: touch.clientX, y: touch.clientY };
           dragStartNodePosRef.current = { ...initialPos };
@@ -322,7 +322,7 @@ export default function Workspace({
     } else if (e.touches.length === 2) {
       setIsPanning(false);
       setDraggingNode(null);
-      
+
       const t1 = e.touches[0];
       const t2 = e.touches[1];
       const dist = Math.hypot(t2.clientX - t1.clientX, t2.clientY - t1.clientY);
@@ -344,10 +344,10 @@ export default function Workspace({
       } else if (draggingNode) {
         const dxPx = touch.clientX - dragStartMouseRef.current.x;
         const dyPx = touch.clientY - dragStartMouseRef.current.y;
-        
+
         let nodeX = dragStartNodePosRef.current.x + dxPx / zoomScale;
         let nodeY = dragStartNodePosRef.current.y + dyPx / zoomScale;
-        
+
         if (isGridSnapping) {
           nodeX = Math.round(nodeX / 15) * 15;
           nodeY = Math.round(nodeY / 15) * 15;
@@ -359,10 +359,10 @@ export default function Workspace({
       const t2 = e.touches[1];
       const dist = Math.hypot(t2.clientX - t1.clientX, t2.clientY - t1.clientY);
       const ratio = dist / startTouchDistanceRef.current;
-      
+
       const midX = (t1.clientX + t2.clientX) / 2;
       const midY = (t1.clientY + t2.clientY) / 2;
-      
+
       if (containerRef.current) {
         const rect = containerRef.current.getBoundingClientRect();
         const mouseX = midX - rect.left;
@@ -371,10 +371,10 @@ export default function Workspace({
         const canvasY = (mouseY - panOffset.y) / zoomScale;
 
         const newScale = Math.max(0.15, Math.min(3.0, startZoomScaleRef.current * ratio));
-        
+
         const newPanX = mouseX - canvasX * newScale;
         const newPanY = mouseY - canvasY * newScale;
-        
+
         onZoomScaleChange(newScale);
         onPanOffsetChange({ x: newPanX, y: newPanY });
       }
@@ -439,18 +439,15 @@ export default function Workspace({
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
-      className={`relative flex-1 select-none overflow-hidden h-full outline-none ${
-        isPanning ? "cursor-grabbing active:cursor-grabbing" : isSpacePressed ? "cursor-grab" : "cursor-default"
-      } ${
-        isDarkMode ? "bg-slate-950" : "bg-slate-50"
-      }`}
+      className={`relative flex-1 select-none overflow-hidden h-full outline-none ${isPanning ? "cursor-grabbing active:cursor-grabbing" : isSpacePressed ? "cursor-grab" : "cursor-default"
+        } ${isDarkMode ? "bg-slate-950" : "bg-slate-50"
+        }`}
     >
       {/* Sleek Floating HUD Controls */}
       <div className="absolute top-4 left-4 right-4 z-20 pointer-events-none flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
         {/* Brand Label */}
-        <div className={`p-2 px-3 rounded-xl border flex items-center gap-2 shadow-lg backdrop-blur-md pointer-events-auto select-none ${
-          isDarkMode ? "bg-slate-900/90 border-slate-800 text-slate-100" : "bg-white/95 border-slate-200 text-slate-800"
-        }`}>
+        <div className={`p-2 px-3 rounded-xl border flex items-center gap-2 shadow-lg backdrop-blur-md pointer-events-auto select-none ${isDarkMode ? "bg-slate-900/90 border-slate-800 text-slate-100" : "bg-white/95 border-slate-200 text-slate-800"
+          }`}>
           <div className="p-1.5 rounded-lg bg-indigo-600 text-white">
             <Database size={15} />
           </div>
@@ -473,28 +470,25 @@ export default function Workspace({
               placeholder="Filter nodes..."
               value={searchQuery}
               onChange={(e) => onSearchChange(e.target.value)}
-              className={`w-32 pl-8 pr-3 py-1.5 text-xs rounded-lg border outline-none font-medium shadow-md transition-all ${
-                isDarkMode
-                  ? "bg-slate-900 border-slate-800 text-slate-200 placeholder-slate-500 focus:border-indigo-500 focus:w-44"
-                  : "bg-white border-slate-200 text-slate-700 placeholder-slate-400 focus:border-indigo-400 focus:w-44"
-              }`}
+              className={`w-32 pl-8 pr-3 py-1.5 text-xs rounded-lg border outline-none font-medium shadow-md transition-all ${isDarkMode
+                ? "bg-slate-900 border-slate-800 text-slate-200 placeholder-slate-500 focus:border-indigo-500 focus:w-44"
+                : "bg-white border-slate-200 text-slate-700 placeholder-slate-400 focus:border-indigo-400 focus:w-44"
+                }`}
             />
           </div>
 
           {/* Canvas Tools container */}
-          <div className={`flex items-center gap-1 border px-1 py-1 rounded-lg shadow-md backdrop-blur-md ${
-            isDarkMode ? "bg-slate-900/95 border-slate-800" : "bg-white/95 border-slate-150"
-          }`}>
+          <div className={`flex items-center gap-1 border px-1 py-1 rounded-lg shadow-md backdrop-blur-md ${isDarkMode ? "bg-slate-900/95 border-slate-800" : "bg-white/95 border-slate-150"
+            }`}>
             <button
               id="btn-grid-snap"
               type="button"
               onClick={() => setIsGridSnapping(!isGridSnapping)}
               title="Toggle Grid Snapping (align models neatly)"
-              className={`p-1 px-1.5 rounded-md transition-all text-[11px] flex items-center gap-1 font-semibold cursor-pointer ${
-                isGridSnapping
-                  ? "bg-indigo-600/15 text-indigo-500"
-                  : isDarkMode ? "hover:bg-slate-800 text-slate-400" : "hover:bg-slate-100 text-slate-500"
-              }`}
+              className={`p-1 px-1.5 rounded-md transition-all text-[11px] flex items-center gap-1 font-semibold cursor-pointer ${isGridSnapping
+                ? "bg-indigo-600/15 text-indigo-500"
+                : isDarkMode ? "hover:bg-slate-800 text-slate-400" : "hover:bg-slate-100 text-slate-500"
+                }`}
             >
               <div className={`w-1.5 h-1.5 rounded-full ${isGridSnapping ? "bg-indigo-500 animate-pulse" : "bg-slate-400"}`} />
               <span>Grid Snap</span>
@@ -506,9 +500,8 @@ export default function Workspace({
               type="button"
               onClick={onAutoLayout}
               title="Reset Layout & Coordinates"
-              className={`p-1 rounded-md transition-all text-[11px] flex items-center gap-1 font-semibold cursor-pointer ${
-                isDarkMode ? "hover:bg-slate-800 text-slate-300" : "hover:bg-slate-100 text-slate-600"
-              }`}
+              className={`p-1 rounded-md transition-all text-[11px] flex items-center gap-1 font-semibold cursor-pointer ${isDarkMode ? "hover:bg-slate-800 text-slate-300" : "hover:bg-slate-100 text-slate-600"
+                }`}
             >
               <RefreshCw size={12} />
               <span className="hidden md:inline">Reset</span>
@@ -519,9 +512,8 @@ export default function Workspace({
               id="btn-zoom-out"
               onClick={() => adjustZoomCentered(Math.max(0.15, zoomScale - 0.15))}
               title="Zoom Out"
-              className={`p-1 rounded-md transition-colors ${
-                isDarkMode ? "hover:bg-slate-800 text-slate-300" : "hover:bg-slate-100 text-slate-600"
-              }`}
+              className={`p-1 rounded-md transition-colors ${isDarkMode ? "hover:bg-slate-800 text-slate-300" : "hover:bg-slate-100 text-slate-600"
+                }`}
             >
               <ZoomOut size={13} />
             </button>
@@ -532,9 +524,8 @@ export default function Workspace({
               id="btn-zoom-in"
               onClick={() => adjustZoomCentered(Math.min(3.0, zoomScale + 0.15))}
               title="Zoom In"
-              className={`p-1 rounded-md transition-colors ${
-                isDarkMode ? "hover:bg-slate-800 text-slate-300" : "hover:bg-slate-100 text-slate-600"
-              }`}
+              className={`p-1 rounded-md transition-colors ${isDarkMode ? "hover:bg-slate-800 text-slate-300" : "hover:bg-slate-100 text-slate-600"
+                }`}
             >
               <ZoomIn size={13} />
             </button>
@@ -545,9 +536,8 @@ export default function Workspace({
                 onPanOffsetChange({ x: 30, y: 30 });
               }}
               title="Reset Zoom"
-              className={`p-1 rounded-md transition-colors ${
-                isDarkMode ? "hover:bg-slate-800 text-slate-300" : "hover:bg-slate-100 text-slate-600"
-              }`}
+              className={`p-1 rounded-md transition-colors ${isDarkMode ? "hover:bg-slate-800 text-slate-300" : "hover:bg-slate-100 text-slate-600"
+                }`}
             >
               <Maximize size={12} />
             </button>
@@ -558,11 +548,10 @@ export default function Workspace({
             id="btn-theme-toggle"
             onClick={onToggleTheme}
             title={isDarkMode ? "Light Mode" : "Dark Mode"}
-            className={`p-1.5 rounded-lg border flex items-center justify-center transition-all shadow-md active:scale-95 duration-200 ${
-              isDarkMode
-                ? "bg-slate-900 border-slate-800 text-amber-400 hover:text-amber-300"
-                : "bg-white border-slate-200 text-indigo-700 hover:bg-slate-50"
-            }`}
+            className={`p-1.5 rounded-lg border flex items-center justify-center transition-all shadow-md active:scale-95 duration-200 ${isDarkMode
+              ? "bg-slate-900 border-slate-800 text-amber-400 hover:text-amber-300"
+              : "bg-white border-slate-200 text-indigo-700 hover:bg-slate-50"
+              }`}
           >
             {isDarkMode ? <Sun size={13} className="stroke-[2.5]" /> : <Moon size={13} className="stroke-[2.5]" />}
           </button>
@@ -672,9 +661,8 @@ export default function Workspace({
 
             // Bezier horizontal wave calculations
             const dx = Math.max(60, Math.min(200, Math.abs(x2 - x1) * 0.6));
-            const pathData = `M ${x1} ${y1} C ${x1 + (isLeftToRight ? dx : -dx)} ${y1}, ${
-              x2 + (isLeftToRight ? -dx : dx)
-            } ${y2}, ${x2} ${y2}`;
+            const pathData = `M ${x1} ${y1} C ${x1 + (isLeftToRight ? dx : -dx)} ${y1}, ${x2 + (isLeftToRight ? -dx : dx)
+              } ${y2}, ${x2} ${y2}`;
 
             const isHighlighted = isRelationHighlighted(edge);
             const isHovered = hoveredEdgeId === edge.id;
@@ -720,12 +708,10 @@ export default function Workspace({
                   stroke={strokeColor}
                   strokeWidth={isHighlighted || isHovered ? 3.5 : 2}
                   strokeDasharray={edge.isImplicit ? "6, 4" : undefined}
-                  className={`transition-all duration-300 ${
-                    isHighlighted ? "animated-pulse-line shadow-lg" : ""
-                  }`}
-                  markerEnd={`url(#${
-                    isHighlighted ? "arrow-active" : edge.isImplicit ? "arrow-implicit" : "arrow-std"
-                  })`}
+                  className={`transition-all duration-300 ${isHighlighted ? "animated-pulse-line shadow-lg" : ""
+                    }`}
+                  markerEnd={`url(#${isHighlighted ? "arrow-active" : edge.isImplicit ? "arrow-implicit" : "arrow-std"
+                    })`}
                 />
 
                 {/* Edge Label Badge */}
@@ -750,10 +736,10 @@ export default function Workspace({
                         isHighlighted
                           ? "#f59e0b"
                           : edge.isImplicit
-                          ? "#10b981"
-                          : isDarkMode
-                          ? "#cbd5e1"
-                          : "#1e293b"
+                            ? "#10b981"
+                            : isDarkMode
+                              ? "#cbd5e1"
+                              : "#1e293b"
                       }
                     >
                       {edge.relationType === "n-n" ? "N:N" : edge.relationType === "1-n" ? "1:N" : "1:1"}
@@ -765,7 +751,7 @@ export default function Workspace({
           })}
         </svg>
 
-         {/* HTML Layer for rendering database model node cards */}
+        {/* HTML Layer for rendering database model node cards */}
         <div id="html-nodes-container" className="absolute top-0 left-0 w-full h-full pointer-events-none">
           {models.map((model) => {
             const pos = nodePositions[model.name] || { x: 50, y: 50 };
@@ -778,19 +764,17 @@ export default function Workspace({
               <div
                 key={model.name}
                 id={`node-${model.name}`}
-                className={`absolute w-[260px] rounded-xl border flex flex-col pointer-events-auto select-none transition-all duration-150 ${
-                  isFadeOut ? "opacity-30 scale-95" : "opacity-100"
-                } ${
-                  isDragging
+                className={`absolute w-[260px] rounded-xl border flex flex-col pointer-events-auto select-none transition-all duration-150 ${isFadeOut ? "opacity-30 scale-95" : "opacity-100"
+                  } ${isDragging
                     ? "shadow-2xl shadow-indigo-600/20 rotate-[1.5deg] scale-[1.03] z-50 ring-2 ring-indigo-500 border-indigo-505"
                     : isSelected
-                    ? "ring-2 ring-indigo-500 border-indigo-500 shadow-xl shadow-indigo-500/10 z-20"
-                    : matchesSearch
-                    ? "ring-2 ring-amber-400 border-amber-400 animate-pulse z-25"
-                    : isDarkMode
-                    ? "bg-slate-900 border-slate-800 text-slate-100 hover:shadow-2xl"
-                    : "bg-white border-slate-200 text-slate-800 hover:shadow-2xl"
-                }`}
+                      ? "ring-2 ring-indigo-500 border-indigo-500 shadow-xl shadow-indigo-500/10 z-20"
+                      : matchesSearch
+                        ? "ring-2 ring-amber-400 border-amber-400 animate-pulse z-25"
+                        : isDarkMode
+                          ? "bg-slate-900 border-slate-800 text-slate-100 hover:shadow-2xl"
+                          : "bg-white border-slate-200 text-slate-800 hover:shadow-2xl"
+                  }`}
                 style={{
                   left: pos.x,
                   top: pos.y,
@@ -799,9 +783,8 @@ export default function Workspace({
                 {/* Node Card Header Handle */}
                 <div
                   onMouseDown={(e) => handleNodeDragStart(e, model.name)}
-                  className={`px-4 py-3 rounded-t-xl border-b cursor-grab active:cursor-grabbing font-sans font-bold flex items-center justify-between transition-colors ${
-                    isDarkMode ? "bg-slate-850/65 border-slate-800" : "bg-slate-50 border-slate-150"
-                  }`}
+                  className={`px-4 py-3 rounded-t-xl border-b cursor-grab active:cursor-grabbing font-sans font-bold flex items-center justify-between transition-colors ${isDarkMode ? "bg-slate-850/65 border-slate-800" : "bg-slate-50 border-slate-150"
+                    }`}
                 >
                   <div className="flex items-center gap-2 min-w-0">
                     <span className="text-[10px] text-indigo-500 font-mono select-none uppercase font-black">
@@ -866,13 +849,12 @@ export default function Workspace({
                           onSelectModel(model.name);
                           onSelectField(field.name);
                         }}
-                        className={`h-[38px] px-2.5 rounded-md flex items-center justify-between text-xs cursor-pointer transition-all ${
-                          isFldSelected
-                            ? "bg-indigo-600/15 border border-indigo-500/40 text-indigo-600 dark:text-indigo-400 font-bold"
-                            : isRelatedHighlighted
+                        className={`h-[38px] px-2.5 rounded-md flex items-center justify-between text-xs cursor-pointer transition-all ${isFldSelected
+                          ? "bg-indigo-600/15 border border-indigo-500/40 text-indigo-600 dark:text-indigo-400 font-bold"
+                          : isRelatedHighlighted
                             ? "bg-amber-500/10 border border-amber-500/30 text-amber-500 animate-pulse font-bold"
                             : "hover:bg-slate-500/5 text-slate-700 dark:text-slate-300 border border-transparent"
-                        }`}
+                          }`}
                       >
                         {/* Name and constraints icon */}
                         <div className="flex items-center gap-1.5 min-w-0">
@@ -950,19 +932,17 @@ export default function Workspace({
               <div
                 key={enumItem.name}
                 id={`node-${enumItem.name}`}
-                className={`absolute w-[260px] rounded-xl border flex flex-col pointer-events-auto select-none transition-all duration-150 ${
-                  isFadeOut ? "opacity-30 scale-95" : "opacity-100"
-                } ${
-                  isDragging
+                className={`absolute w-[260px] rounded-xl border flex flex-col pointer-events-auto select-none transition-all duration-150 ${isFadeOut ? "opacity-30 scale-95" : "opacity-100"
+                  } ${isDragging
                     ? "shadow-2xl shadow-violet-600/20 rotate-[1.5deg] scale-[1.03] z-50 ring-2 ring-violet-500 border-violet-500"
                     : isSelected
-                    ? "ring-2 ring-violet-500 border-violet-500 shadow-xl shadow-violet-500/10 z-20"
-                    : matchesSearch
-                    ? "ring-2 ring-amber-400 border-amber-400 animate-pulse z-25"
-                    : isDarkMode
-                    ? "bg-slate-900 border-slate-800 text-slate-100 hover:shadow-2xl"
-                    : "bg-white border-slate-200 text-slate-800 hover:shadow-2xl"
-                }`}
+                      ? "ring-2 ring-violet-500 border-violet-500 shadow-xl shadow-violet-500/10 z-20"
+                      : matchesSearch
+                        ? "ring-2 ring-amber-400 border-amber-400 animate-pulse z-25"
+                        : isDarkMode
+                          ? "bg-slate-900 border-slate-800 text-slate-100 hover:shadow-2xl"
+                          : "bg-white border-slate-200 text-slate-800 hover:shadow-2xl"
+                  }`}
                 style={{
                   left: pos.x,
                   top: pos.y,
@@ -971,9 +951,8 @@ export default function Workspace({
                 {/* Node Card Header Handle */}
                 <div
                   onMouseDown={(e) => handleNodeDragStart(e, enumItem.name)}
-                  className={`px-4 py-3 rounded-t-xl border-b cursor-grab active:cursor-grabbing font-sans font-bold flex items-center justify-between transition-colors ${
-                    isDarkMode ? "bg-slate-850/65 border-slate-800" : "bg-slate-50 border-slate-150"
-                  }`}
+                  className={`px-4 py-3 rounded-t-xl border-b cursor-grab active:cursor-grabbing font-sans font-bold flex items-center justify-between transition-colors ${isDarkMode ? "bg-slate-850/65 border-slate-800" : "bg-slate-50 border-slate-150"
+                    }`}
                 >
                   <div className="flex items-center gap-2 min-w-0">
                     <span className="text-[10px] text-violet-500 font-mono select-none uppercase font-black px-1 py-[1px] leading-none rounded bg-violet-500/10 border border-violet-500/20 shadow-sm">
@@ -1026,11 +1005,10 @@ export default function Workspace({
       {hoveredEdgeId && hoveredEdgeCoords && activeHoveredEdge && (
         <div
           id="edge-relation-tooltip"
-          className={`absolute p-3 rounded-lg border shadow-xl z-50 text-[11px] font-mono leading-tight max-w-sm pointer-events-none divide-y divide-slate-700/10 transition-opacity duration-200 ${
-            isDarkMode
-              ? "bg-slate-900/95 border-emerald-500/30 text-slate-200"
-              : "bg-white/95 border-indigo-500/20 text-slate-700"
-          }`}
+          className={`absolute p-3 rounded-lg border shadow-xl z-50 text-[11px] font-mono leading-tight max-w-sm pointer-events-none divide-y divide-slate-700/10 transition-opacity duration-200 ${isDarkMode
+            ? "bg-slate-900/95 border-emerald-500/30 text-slate-200"
+            : "bg-white/95 border-indigo-500/20 text-slate-700"
+            }`}
           style={{
             left: hoveredEdgeCoords.x * zoomScale + panOffset.x,
             top: hoveredEdgeCoords.y * zoomScale + panOffset.y,
