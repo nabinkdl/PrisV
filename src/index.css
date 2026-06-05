@@ -1,0 +1,13 @@
+@import "tailwindcss";
+
+@keyframes dashScroll {
+  to {
+    stroke-dashoffset: -20;
+  }
+}
+
+.animated-pulse-line {
+  stroke-dasharray: 8, 4;
+  animation: dashScroll 1s linear infinite;
+}
+
