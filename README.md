@@ -1,4 +1,4 @@
-# Prisma Schema Visualizer
+# PrisV: Prisma Schema Visualizer
 
 A dynamic, interactive, and beautifully designed graph visualization tool for Prisma database schemas. Instantly turn your `.prisma` files into visual ER diagrams with live code parsing, node dragging, and multi-format exporting.
 
